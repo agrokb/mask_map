@@ -56,3 +56,32 @@
  }
 }
 </style>
+
+<script>
+import L from 'leaflet';
+import cityName from './assets/cityName.json';
+
+export default {
+    name:'App',
+    components:{
+    },
+    data:()=>({
+        data:[],
+        cityName
+    }),
+    mounted(){
+        const url = 'https://protected-badlands-59246.herokuapp.com/api/v1/mask';
+        this.$http.get(url).then((response) =>{
+            console.log(response.data);
+            this.data = response.data;
+        })
+
+        let osmMap = L.map('map',{
+            center:[25.03,121.55],
+            zoom:15,
+        });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(osmMap);
+        },
+    
+}
+</script>
