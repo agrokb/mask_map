@@ -16,7 +16,7 @@
                     <div class="form-group d-flex">
                         <label for="area" class="mr-2 col-form-label text-right">地區</label>
                         <div class="flex-fill">
-                            <select id="area" class="form-control">
+                            <select id="area" class="form-control" v-model="selectedTown" @change="chooseTown">
                                 <option v-for="item in region" :key="item.AreaName">{{ item.AreaName }}</option>
                             </select>
                         </div>
@@ -24,29 +24,16 @@
                     <p class="mb-0 small text-muted text-right">請先選擇區域查看（綠色表示還有口罩）</p>
                 </div>
                 <ul class="list-group">
-                    <a class="list-group-item text-left" v-for="item in data" :key="item.properties.id">
+                    <a class="list-group-item text-left" v-for="item in localData" :key="item.properties.id">
                         <h3>{{ item.properties.name }}</h3>
                         <p class="mb-0">
-                            成人口罩：1 | 兒童口罩：2
+                            成人口罩：{{ item.properties.mask_adult }} | 兒童口罩：{{ item.properties.mask_child }}
                         </p>
-                        <p class="mb-0">地址：
-                            <a href="https://www.google.com.tw/maps/place/..." target="_blank" title="Google Map">
-                            
+                        <p class="mb-0">地址：{{ item.properties.address }}
+                            <a href="https://www.google.com.tw/maps/place/..." target="_blank" title="Google Map">            
                             </a>
                         </p>
                     </a>
-                    <a class="list-group-item text-left">
-                        <h3>藥局名稱</h3>
-                        <p class="mb-0">
-                            成人口罩：1 | 兒童口罩：2
-                        </p>
-                        <p class="mb-0">地址：
-                            <a href="https://www.google.com.tw/maps/place/..." target="_blank" title="Google Map">
-                            
-                            </a>
-                        </p>
-                    </a>
-
                 </ul>
             </div>
         </div>
@@ -89,6 +76,7 @@
             cityName,
             region:[],
             selectedCity:'-- please choose --',
+            selectedTown:'',
             localData:[]
         }),
         methods: {
@@ -96,6 +84,13 @@
                 this.cityName.forEach((value) => {
                     if(value.CityName == this.selectedCity){
                         this.region = value.AreaList
+                    }
+                })
+            },
+            chooseTown(){
+                this.data.forEach((value) => {
+                    if(value.properties.town == this.selectedTown){
+                        this.localData.push(value)
                     }
                 })
             }
